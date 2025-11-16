@@ -1,0 +1,1 @@
+<a href="/accounts/Login?hl=ja&continue=http://www.google.co.jp/" class=gb4>ログイン</a>

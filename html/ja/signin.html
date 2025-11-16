@@ -1,0 +1,431 @@
+<html>
+<style type="text/css">
+  <!--
+  body { font-family: arial,sans-serif; background-color: #fff; margin-top: 2; }
+  .c { width: 4; height: 4; } 
+  a:link { color: #00c; } 
+  a:visited { color: #551a8b; }
+  a:active { color: #f00; }
+  .form-noindent { background-color: #fff; border: 1px solid #c3d9ff; }
+  -->
+</style>
+<style type="text/css"><!--
+.gaia.le.lbl { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.fpwd { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.chusr { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.val { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.button { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.rem { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+
+.gaia.captchahtml.desc { font-family: arial, sans-serif; font-size: smaller; } 
+.gaia.captchahtml.cmt { font-family: arial, sans-serif; font-size: smaller; font-style: italic; }
+  
+--></style>
+  <head>
+  <title>Google アカウント</title>
+  <style type="text/css"><!--
+  
+  
+    body {
+      font-family: arial, sans-serif;
+      margin: 0;
+      padding: 13px 15px 15px;
+      
+    }
+    .body {
+      margin: 0;
+    }
+    div.errorbox-good {}
+
+    div.errorbox-bad {} 
+
+    div.errormsg { color: red; font-size: smaller; font-family: arial,sans-serif;}
+    font.errormsg { color: red; font-size: smaller; font-family: arial,sans-serif;}
+
+    
+    div.topbar {
+      font-size:smaller;
+      margin-right: -5px;
+      text-align:right;
+      white-space:nowrap;
+    }
+    div.header {
+      margin-bottom: 9px;
+      margin-left: -2px;
+      position:relative;
+      zoom: 1
+    }
+    div.header img.logo {
+      border: 0;
+      float:left;
+    }
+    div.header div.headercontent {
+      float:right;
+      margin-top:17px;
+    }
+    div.header:after{
+      content:".";
+      display:block;
+      height:0;
+      clear:both;
+      visibility:hidden;
+    }
+    div.pagetitle {
+      font-weight:bold;
+    }
+    
+    .footer { 
+      color: #666;
+      font-size: smaller;
+      margin-top: 40px;
+      text-align: center;
+    }
+    
+    table#signupform {
+      left: -5px;
+      top: -7px;
+      position:relative;
+    }
+    table#signupform td{
+      padding: 7px 5px;
+    }
+    table#signupform td table td{
+      padding: 1px;
+    }
+
+    
+    
+    hr {
+      border: 0;
+      background-color:#DDDDDD;
+      height: 1px;
+      width: 100%;
+      text-align: left;
+      margin: 5px;
+    }
+    
+
+    
+    
+  --></style>
+</head>
+  <body dir="ltr"
+        onLoad=
+                 "gaia_setFocus();"
+               >
+  <div id="main">
+<div class=header>
+  <a href='https://www.google.com/accounts/'>
+  <img class=logo
+       src='/intl/ja/images/logos/accounts_logo.gif'
+       alt="Google" />
+  </img>
+  </a>
+</div>
+  <div id=maincontent>
+  <table border="0" width="100%" cellpadding=0 cellspacing=0>
+  <tr>
+  <td width="75%" valign="top">
+<div style="font-size:83%;">
+<b>
+ログインすると Google の各種機能を自分好みにカスタマイズできます。 
+</b>
+<br/><br/>
+Google アカウントにログインすることで、表示する検索結果をパーソナライズしたり、さまざまな機能をご利用いただけます。表示するコンテンツを選んだり、検索キーワードの候補を表示することもできます。 
+<br/><br/>
+右側のボックスからログインしてください。アカウントをお持ちでない方も 
+<a href="https://www.google.com/accounts/NewAccount">
+アカウントを作成</a>
+（無料）するとすぐにログインできます。 
+<br/><br/>
+<table border="0" cellpadding="4">
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td>
+  <img src="/accounts/mail.gif"
+                       alt="Gmail">
+  </img>
+  </td>
+  <td style="font-size:83%">
+  <a href="http://mail.google.com/mail?hl=en">Gmail</a>
+  <br />
+  迷惑メールにうんざりしている方へ
+  </td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td>
+  <img src="/accounts/msh.gif"
+                       alt="ウェブ履歴">
+  </img>
+  </td>
+  <td style="font-size:83%">
+  <a href="http://www.google.com/history/?hl=en">ウェブ履歴</a>
+  <br />
+  ウェブの履歴をどこからでも表示、管理
+  </td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td>
+  <img src="/accounts/ig.gif"
+                       alt="iGoogle">
+  </img>
+  </td>
+  <td style="font-size:83%">
+  <a href="http://www.google.com/ig?source=gapg&amp;hl=en">iGoogle</a>
+  <br />
+  選べるコンテンツとデザイン - ログインしてお好みに Google ページをプロデュース
+  </td>
+  </tr>
+</table>
+</div>
+  </td>
+  <td style="padding-left: 10px;" valign="top" align="center">
+  <div id="rhs">
+  <div id="rhs_login_signup_box">
+<script><!--
+
+function gaia_onLoginSubmit() {
+
+  
+  if (window.gaiacb_onLoginSubmit) {
+    return gaiacb_onLoginSubmit();
+  } else {
+    return true;
+  }
+
+}
+
+--></script>
+<style type="text/css"><!--
+  div.errormsg { color: red; font-size: smaller; font-family:arial,sans-serif; }
+  font.errormsg { color: red; font-size: smaller; font-family:arial,sans-serif; }  
+--></style>
+<style type="text/css"><!--
+.gaia.le.lbl { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.fpwd { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.chusr { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.val { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.button { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.rem { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+
+.gaia.captchahtml.desc { font-family: arial, sans-serif; font-size: smaller; } 
+.gaia.captchahtml.cmt { font-family: arial, sans-serif; font-size: smaller; font-style: italic; }
+  
+--></style>
+<form id="gaia_loginform"
+      
+        action="/accounts/LoginAuth" method="post"
+      
+      onsubmit=
+                 "return(gaia_onLoginSubmit());"
+                >
+<div id="gaia_loginbox">
+<table class="form-noindent" cellspacing="3" cellpadding="5" width="100%" border="0">
+  <tr>
+  <td valign="top" style="text-align:center" nowrap="nowrap"
+        bgcolor="#e8eefa">
+  <div class="loginBox">
+  <table id="gaia_table" align="center" border="0" cellpadding="1" cellspacing="0">
+  <tr>
+<td colspan="2" align="center">
+  <table>
+  <tr>
+  <td valign="top">
+  <img src="/accounts/google_transparent.gif"
+           alt="Google">
+  </img>
+  </td>
+  <td valign="middle">
+  <font size="+0"><b>アカウント</b></font>
+  </td>
+  </tr>
+</table>
+</td>
+</tr>
+  <script type="text/javascript"><!--
+    function onPreCreateAccount() {
+    
+      return true;
+    
+    }
+
+    function onPreLogin() {
+    
+      
+      if (window["onlogin"] != null) {
+        return onlogin();
+      } else {
+        return true;
+      }
+    
+    }
+  --></script>
+<tr>
+  <td colspan="2" align="center">
+  </td>
+</tr>
+<tr id="email-row">
+  <td nowrap="nowrap">
+  <div align="right">
+  <span class="gaia le lbl">
+  メール:
+  </span>
+  </div>
+  </td>
+  <td>
+  <input type="hidden" name="dsh" id="dsh"
+           value="-2084693332882627545" />
+  <input type="hidden"
+             name="GALX"
+             value="Ya2Xne66eTw" />
+  <input type="text" name="Email"  id="Email"
+  size="18" value=""
+  
+  
+    class='gaia le val'
+  
+  />
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td align="left">
+  </td>
+</tr>
+<tr id="password-row" class="enabled">
+  <td align="right" nowrap="nowrap">
+  <span class="gaia le lbl">
+  パスワード:
+  </span>
+  </td>
+  <td>
+  <input type="password"
+   name="Passwd" id="Passwd"
+  size="18" 
+  
+  
+
+  
+    class="gaia le val" 
+  
+  />
+  </td>
+</tr>
+<tr>
+  <td> </td>
+  <td align="left">
+  </td>
+</tr>
+  <tr id="rememberme-row" class="enabled">
+  <td align="right" valign="top">
+  <input type="checkbox" name="PersistentCookie" id="PersistentCookie"
+    value="yes"
+  
+    checked='checked'
+  
+  />
+  <input type="hidden" name='rmShown' value="1" />
+  </td>
+  <td>
+  <label for="PersistentCookie" id="PersistentCookieLabel" class="gaia le rem">
+  ログイン状態を保持する
+  </label>
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td align="left">
+  <input type="submit" class="gaia le button" name="signIn"
+           value="ログイン"
+                  />
+  </td>
+</tr>
+<tr id="ga-fprow">
+  <td colspan="2" height="33.0" class="gaia le fpwd"
+    align="center" valign="bottom">
+  <a href="http://www.google.com/support/accounts/bin/answer.py?answer=48598&amp;hl=en&amp;ctx=ch_Login&amp;fpUrl=https%3A%2F%2Fwww.google.com%2Faccounts%2FForgotPasswd%3FfpOnly%3D1"
+       target=_top>
+  アカウントにアクセスできない場合
+  </a>
+  </td>
+</tr>
+  </table>
+  </div>
+  </td>
+  </tr>
+</table>
+</div>
+<input type="hidden" name="asts"
+       id="asts"
+       value="">
+</form>
+<script><!--
+var gaia_loginForm;
+if (document.getElementById) {
+  gaia_loginForm = document.getElementById("gaia_loginform");
+} else if (window.gaia_loginform) {
+  gaia_loginForm = window.gaia_loginform;
+}
+
+var gaia_emailHasKeypress = false;
+if (gaia_loginForm && gaia_loginForm.Email) {
+  gaia_loginForm.Email.onkeypress = function() {
+    gaia_emailHasKeypress = true;
+  }
+}
+
+function gaia_setFocus() {
+  if (gaia_loginForm) {
+    if (gaia_loginForm.Email && !gaia_loginForm.Email.value) {
+      gaia_loginForm.Email.focus();
+    } else if (gaia_loginForm.Passwd && !gaia_emailHasKeypress) {
+      gaia_loginForm.Passwd.focus();
+    }
+    
+  }
+}
+
+gaia_setFocus();
+--></script>
+<form id="gaia_universallogin"
+      action="/accounts/LoginAuth" method="post"
+      onsubmit="return(gaia_onLoginSubmit());">
+  <input type="hidden" name="dsh" id="dsh"
+           value="-2084693332882627545" />
+</form>
+  <br/>
+<table class="form-noindent" border="0" cellpadding="6" cellspacing="3" width="100%">
+  <tr>
+  <td bgcolor="#e8eefa" align="center" style="font-size:83%">
+  <b>Google アカウントをお持ちでない場合
+  </b><br/>
+  <a href='/accounts/NewAccount' >
+  <b>アカウントを作成</b>
+  </a>
+  </td>
+  </tr>
+</table>
+  </div>
+  <br/>
+  </div>
+  </td>
+  </tr>
+  </table>
+  </div>
+<div class="footer">
+  &copy;2010 Google
+  -
+  <a href='http://www.google.com/'>Google ホーム</a>
+  -
+  <a href='https://www.google.com/accounts/TOS?hl=en'>利用規約</a>
+  -
+  <a href='http://www.google.com/intl/en/privacy.html'>プライバシーポリシー</a>
+  -
+  <a href='http://www.google.com/support/accounts?hl=en'>ヘルプ</a>
+</div>
+  </div>
+  </body>
+</html>

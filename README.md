@@ -1,5 +1,5 @@
-# gs2009-ja
-Google search (google.co.jp) 2009 recreation with node.js and Google Search
+# gs2009
+Google search 2009 recreation with node.js and Google Search Custom API
 
 **Check Protoweb for early-2000s, Gplex about after 2010+ styles...**
 

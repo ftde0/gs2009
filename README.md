@@ -42,3 +42,6 @@ Otherwise, You will be redirected to settings page when you tried to search.
 
 ### Search results
  - `before:` option
+
+## License
+apache 2.0 please see license file in repo

@@ -8,4 +8,37 @@
 <h3 align="center">Google search 2009 recreation with node.js and Google Search Custom API</h3>
 <h5 align="center">Check Protoweb for early-2000s, Gplex about after 2010+ styles...</h5>
 
+## Features
+ - **2009 google**
+ - **Search features!** (images/videos search are not implemented yet)
+ - **Simulated login feature**
+ - I'm feeling lucky
+ - **Add `before:` option automatically**
+ - Redirector to **HTTP / yt2009 & Wayback Machine**
+
 ## Usage
+1. Install [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/). (tested on node 18.19.1/24.11.1, npm 11.6.2/9.2.0)
+2. After cloning the repository, `npm install` (if need, `npm audit fix`)
+3. `npm start` or `node index.js`
+4. It will automatically generates config.json, and runs server at PORT 3000 by default.
+5. Go to `http://[IP]:3000/gs2009settings`, then put your **Custom Search API key** and **Programmable Search Engine ID** (CSE ID), then Save it.
+
+## Available Preferences
+
+ - **Port**
+    - It is hidden in settings page, but you can configure it on config.json.
+
+### API key / CSE ID (Programmable Search Engine ID)
+**You need this to show search results on this frontend!**
+Otherwise, You will be redirected to settings page when you tried to search.
+
+### Language
+**Available language:** `en, ja`
+ - You can add your native language by pull requesting. Please look guide later!
+
+### Redirector
+ - **HTTPS to HTTP**
+ - **Redirect to yt2009 / Wayback Machine** (both/or either)
+
+### Search results
+ - `before:` option

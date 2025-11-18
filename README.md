@@ -1,34 +1,11 @@
-# gs2009
-Google search 2009 recreation with node.js and Google Search Custom API
+<h5 align="center">
+<nobr>
+<img width="384" height="288" alt="image" src="https://github.com/user-attachments/assets/f2825850-07a9-4fb3-bf2e-26ec7d69bf4f" />
+<img width="384" height="288" alt="image" src="https://github.com/user-attachments/assets/d54fd513-cafd-472b-9a14-e5d0b81f02ac" />
+</nobr>
+</h5>
+<h1 align="center">gs2009</h1>
+<h3 align="center">Google search 2009 recreation with node.js and Google Search Custom API</h3>
+<h5 align="center">Check Protoweb for early-2000s, Gplex about after 2010+ styles...</h5>
 
-**Check Protoweb for early-2000s, Gplex about after 2010+ styles...**
-
-## Features
- - Search Feature*
- - (Togglable) Search with "before:" option*
- - (Togglable) Redirector (yt2009/Wayback Machine)*
- - Doodles / Original Ads
- - Login
-
-**not implemented*
-
-## To-do
-### Basic features
- - [x] Create the basic server
- - [ ] Grabbing from URL
- - [ ] Grabbing from Google Search API
- - [ ] Create the result page from HTML and search results
-
-### For Options
- - [ ] Make the list of options
- - [ ] Make the options page (waow coding)
- - [ ] Save the options to browser cookies
- - [ ] Read the datas from browser cookies
-
-### Doodles
- - [ ] Grabbing the all doodles from downloaded snapshots
- - [ ] Downloading doodles image from snapshots
- - [ ] Make the list of the doodles date / image path
- - [ ] if the dates of the doodle, Put the doodles in main page / search page
-
- - [ ] Log in simulate
+## Usage

@@ -14,7 +14,7 @@
  - **Simulated login feature**
  - I'm feeling lucky
  - **Add `before:` option automatically**
- - Redirector to **HTTP / yt2009 & Wayback Machine**
+ - Redirector to **HTTP / [yt2009](https://github.com/ftde0/yt2009) & [Wayback Machine](https://web.archive.org)**
 
 ## Usage
 1. Install [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/). (tested on node 18.19.1/24.11.1, npm 11.6.2/9.2.0)
@@ -38,7 +38,7 @@ Otherwise, You will be redirected to settings page when you tried to search.
 
 ### Redirector
  - **HTTPS to HTTP**
- - **Redirect to yt2009 / Wayback Machine** (both/or either)
+ - **Redirect to [yt2009](https://github.com/ftde0/yt2009) / [Wayback Machine](https://web.archive.org)** (both/or either)
 
 ### Search results
  - `before:` option

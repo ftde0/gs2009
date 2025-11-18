@@ -1,7 +1,22 @@
 {
-  "name": "gs2009-ja",
+  "name": "gs2009",
+  "version": "1.0.20251119",
   "description": "google.co.jp 2009 recreation with nodejs",
+  "homepage": "https://github.com/pap-git/gs2009#readme",
+  "bugs": {
+    "url": "https://github.com/pap-git/gs2009/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pap-git/gs2009.git"
+  },
+  "license": "Apache-2.0",
+  "author": "paphere",
   "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
@@ -12,5 +27,6 @@
     "iconv-lite": "^0.7.0",
     "qs": "^6.14.0",
     "unescape": "^1.0.1"
-  }
+  },
+  "devDependencies": {}
 }

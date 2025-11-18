@@ -9,7 +9,7 @@
 <h5 align="center">Check Protoweb for early-2000s, Gplex about after 2010+ styles...</h5>
 
 > [!IMPORTANT]
-> **This frontend is pretty extremely undone!** Please make sure that might has the bugs/crashes while using this frontend.<br>
+> **This frontend is pretty extremely incompleted!** Please make sure that might has the bugs/crashes while using this frontend.<br>
 > Also, if you encounted the bug/or crash, **Please make the issue.**
 
 ## Features

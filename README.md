@@ -32,7 +32,7 @@
  - **Port**
     - It is hidden in settings page, but you can configure it on config.json.
 
-### API key / CSE ID (Programmable Search Engine ID)
+### Custom Search API key / Programmable Search Engine ID (CSE ID)
 **You need this to show search results on this frontend!**
 Otherwise, You will be redirected to settings page when you tried to search.
 

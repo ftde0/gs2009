@@ -14,8 +14,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const port = 80;
-
+var port = 3000;
 var gs_api = "";
 var gs_engineID = "";
 var toHTTP = false;
@@ -24,7 +23,7 @@ var waybackdate = "20100324182056";
 var yt2009address = "";
 var only_old = false;
 var only_old_date = "2010-03-20";
-var serverlanguage = "ja";
+var serverlanguage = "en";
 
 function reloadconfig(){
     console.log("[INFO] Reloading config...")
@@ -36,9 +35,37 @@ function reloadconfig(){
     yt2009address = "";
     only_old = false;
     only_old_date = "2010-03-20";
-    serverlanguage = "ja";
+    serverlanguage = "en";
+    
+    try {
+        fs.readFileSync('config.json')
+    } catch(e) {
+        console.error("[ERROR] config.json not found")
+        console.log("[ERROR] regenerating...")
+        const JsonTemp = {
+            PORT: "3000",
 
-    const configTemp = fs.readFileSync('config.json')
+            LANGUAGE: "en",
+
+            API_KEY: "",
+            CSE_ID: "",
+
+            REDIRECTOR_OPTION: "none",
+            REDIRECT_HTTP: false,
+
+            WAYBACKDATE: waybackdate,
+            YT2009_ADDRESS: "",
+
+            ONLY_OLD: false,
+            ONLY_OLD_DATE: only_old_date
+        }
+        console.log(JsonTemp)
+        fs.writeFileSync('config.json', JSON.stringify(JsonTemp));
+        console.log("[INFO] Generated config.json to " + __dirname + "/config.json")
+    }
+
+    const configTemp = fs.readFileSync('config.json');
+
     const config = JSON.parse(configTemp.toString())
 
     gs_api = config.API_KEY
@@ -67,6 +94,8 @@ function reloadconfig(){
     console.log("[CONFIG] only_old_date <= " + config.ONLY_OLD_DATE)
     serverlanguage = config.LANGUAGE
     console.log("[CONFIG] serverlanguage <= " + config.LANGUAGE)
+    port = config.PORT
+    console.log("[CONFIG] port <= " + config.PORT)
 
     if (gs_api == "") {
         console.log("[WARN] Custom Search API (API_KEY) is not set correctly! PLease see /gs2009settings")
@@ -170,6 +199,8 @@ app.get('/setprefs', (req, res) => {
     }
 
     const JsonTemp = {
+        PORT: port,
+
         LANGUAGE: req.query.hl,
 
         API_KEY: req.query.apikey,

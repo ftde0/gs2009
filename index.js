@@ -6,34 +6,88 @@ import cookie from 'cookie-parser';
 import parseurl from 'parseurl';
 import qs from 'qs';
 import googleapis from 'googleapis';
-import unescape from 'unescape';
 import Encoding from 'encoding-japanese';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { match } from "assert";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const port = 80;
-var gs_api = "AIzaSyAQ1COaA2F1l6HC1iHLBhBQKsarwqzFvC8";
-var gs_engineID = "c408fe1ea74914f5b";
-var toHTTP = true;
-var FUCK = false;
-var redirector = true;
-var redirector_only = "yt2009";
+
+var gs_api = "";
+var gs_engineID = "";
+var toHTTP = false;
+var redirector_only = "none";
 var waybackdate = "20100324182056";
-var yt2009address = "192.168.40.134:8080";
-var only_old = true;
+var yt2009address = "";
+var only_old = false;
 var only_old_date = "2010-03-20";
-var serverlanguage = "en";
+var serverlanguage = "ja";
+
+function reloadconfig(){
+    console.log("[INFO] Reloading config...")
+    gs_api = "";
+    gs_engineID = "";
+    toHTTP = false;
+    redirector_only = "none";
+    waybackdate = "20100324182056";
+    yt2009address = "";
+    only_old = false;
+    only_old_date = "2010-03-20";
+    serverlanguage = "ja";
+
+    const configTemp = fs.readFileSync('config.json')
+    const config = JSON.parse(configTemp.toString())
+
+    gs_api = config.API_KEY
+    if (gs_api == "") {
+        console.log("[CONFIG] gs_api <= \"\"")
+    } else {
+        console.log("[CONFIG] gs_api <= [api key]")
+    }
+    gs_engineID = config.CSE_ID
+    if (gs_api == "") {
+        console.log("[CONFIG] gs_engineID <= \"\"")
+    } else {
+        console.log("[CONFIG] gs_engineID <= [cse id]")
+    }
+    toHTTP = config.REDIRECT_HTTP
+    console.log("[CONFIG] toHTTP <= " + config.REDIRECT_HTTP)
+    redirector_only = config.REDIRECTOR_OPTION
+    console.log("[CONFIG] redirector_only <= " + config.REDIRECTOR_OPTION)
+    waybackdate = config.WAYBACKDATE
+    console.log("[CONFIG] waybackdate <= " + config.WAYBACKDATE)
+    yt2009address = config.YT2009_ADDRESS
+    console.log("[CONFIG] yt2009address <= " + config.YT2009_ADDRESS)
+    only_old = config.ONLY_OLD
+    console.log("[CONFIG] only_old <= " + config.ONLY_OLD)
+    only_old_date = config.ONLY_OLD_DATE
+    console.log("[CONFIG] only_old_date <= " + config.ONLY_OLD_DATE)
+    serverlanguage = config.LANGUAGE
+    console.log("[CONFIG] serverlanguage <= " + config.LANGUAGE)
+
+    if (gs_api == "") {
+        console.log("[WARN] Custom Search API (API_KEY) is not set correctly! PLease see /gs2009settings")
+    }
+    if (gs_engineID == "") {
+        console.log("[WARN] Search Engine ID (CSE_ID) is not set correctly! PLease see /gs2009settings")
+    }
+}
+
+reloadconfig()
 
 const {google} = googleapis;
 const customSearch = google.customsearch("v1");
 
 const app = express();
 
+if (serverlanguage == "jp") {
+    console.log("[WARN] redirecting jp to ja")
+    console.log("[CONFIG] serverlanguage <= ja")
+    serverlanguage = "ja";
+}
 
 const template_gbar_user = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user.txt"); // ext_t_g_u
 const template_gbar_user_index = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_index.txt"); // ext_t_g_u
@@ -44,8 +98,13 @@ const template_search_more = path.join(__dirname, "/template/" + serverlanguage 
 const template_search_EOM = path.join(__dirname, "/template/" + serverlanguage + "/search/more_eom.txt"); // ext_t_s_EOM
 
 const ext_t_g_u = fs.readFileSync(template_gbar_user, "utf8")
+console.log("[INFO] loaded template (template_gbar_user)")
 const ext_t_g_u_i = fs.readFileSync(template_gbar_user_index, "utf8")
+console.log("[INFO] loaded template (template_gbar_user_index)")
 const ext_t_g_u_l = fs.readFileSync(template_gbar_user_logged, "utf8")
+console.log("[INFO] loaded template (template_gbar_user_logged)")
+
+var redirector = true;
 
 var query;
 var actualq;
@@ -66,7 +125,6 @@ async function search(event) {
         q: query
     });
 
-    console.log(result);
     return(result);
 }
 
@@ -80,8 +138,59 @@ app.use(cookie());
 app.use(express.static('public'));
 
 app.listen(port, () => {
-    console.log(`port: ${port}`);
+    console.log(`[INFO] Server started at port ${port} in ` + Date());
 });
+
+app.get('/setprefs', (req, res) => {
+    console.log("a")
+    if (req.query.yt2009addr == "yt2009addr-replace-this") {
+        return
+    }
+    console.log(req.query)
+    let redir_temp
+    let redirhttp_temp
+    let onlyold_temp
+
+    if (req.query.redir == "on") {
+        redir_temp = "both"
+    } else {
+        redir_temp = req.query.redir
+    }
+
+    if (req.query.redirhttp != '1') {
+        redirhttp_temp = false;
+    } else {
+        redirhttp_temp = true;
+    }
+
+    if (req.query.onlyold != '1') {
+        onlyold_temp = false;
+    } else {
+        onlyold_temp = true;
+    }
+
+    const JsonTemp = {
+        LANGUAGE: req.query.hl,
+
+        API_KEY: req.query.apikey,
+        CSE_ID: req.query.cseid,
+
+        REDIRECTOR_OPTION: redir_temp,
+        REDIRECT_HTTP: redirhttp_temp,
+
+        WAYBACKDATE: req.query.waybackdate,
+        YT2009_ADDRESS: req.query.yt2009addr,
+
+        ONLY_OLD: onlyold_temp,
+        ONLY_OLD_DATE: req.query.onlyolddate
+    }
+
+    console.log(JsonTemp)
+    fs.writeFileSync('config.json', JSON.stringify(JsonTemp));
+    console.log("[INFO] Generated config.json to " + __dirname + "/config.json")
+    reloadconfig();
+    res.redirect('/');
+})
 
 app.get('/intl/ja_jp/images/logo.gif', (req, res) => {
     fs.readFile('./assets/images/ja_jp/logo.gif', (err, data) => {
@@ -104,8 +213,36 @@ app.get('/images/nav_logo3.png', (req, res) => {
     });
 })
 
+app.get('/images/firefox/firefox35_v1.png', (req, res) => {
+    fs.readFile('./assets/images/firefox/firefox35_v1.png', (err, data) => {
+      res.type('png');
+      res.send(data);
+    });
+})
+
+app.get('/images/firefox/sprite2.png', (req, res) => {
+    fs.readFile('./assets/images/firefox/sprite2.png', (err, data) => {
+      res.type('png');
+      res.send(data);
+    });
+})
+
+app.get('/images/firefox/gradsprite2.png', (req, res) => {
+    fs.readFile('./assets/images/firefox/gradsprite2.png', (err, data) => {
+      res.type('png');
+      res.send(data);
+    });
+})
+
 app.get('/accounts/mail.gif', (req, res) => {
     fs.readFile('./assets/images/accounts/mail.gif', (err, data) => {
+      res.type('gif');
+      res.send(data);
+    });
+})
+
+app.get('/images/logo_sm.gif', (req, res) => {
+    fs.readFile('./assets/images/logo_sm.gif', (err, data) => {
       res.type('gif');
       res.send(data);
     });
@@ -168,7 +305,7 @@ app.get('/favicon.ico', (req, res) => {
 })
 
 app.get('/webhp', (req, res) => {
-    console.log(req.cookies.SimLogin);
+    console.log("[INFO] Simulated login username: " + req.cookies.SimLogin);
     let SimLogin = req.cookies.SimLogin;
     const filePath = path.join(__dirname, "/html/" + serverlanguage + "/index.html");
     fs.readFile(filePath, (err, data) => {
@@ -200,7 +337,7 @@ app.get('/webhp', (req, res) => {
 });
 
 app.get('/imghp', (req, res) => {
-    console.log(req.cookies.SimLogin);
+    console.log("[INFO] Simulated login username: " + req.cookies.SimLogin);
     if (req.cookies.SimLogin === undefined) {
         const filePath = path.join(__dirname, "/html/" + serverlanguage + "/images/index.html");
             fs.readFile(filePath, (err, data) => {
@@ -230,7 +367,7 @@ app.get('/imghp', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    console.log(req.cookies.SimLogin);
+    console.log("[INFO] Simulated login username: " + req.cookies.SimLogin);
     let SimLogin = req.cookies.SimLogin;
     const filePath = path.join(__dirname, "/html/" + serverlanguage + "/index.html");
     fs.readFile(filePath, (err, data) => {
@@ -262,12 +399,79 @@ app.get('/', (req, res) => {
 });
 
 
+app.get('/gs2009settings', (req, res) => {
+    const filePath = path.join(__dirname, "/html/gs2009settings.html");
+    fs.readFile(filePath, (err, data) => {
+        let repl;
+        repl = data.toString();
+        repl = repl.replace("api-key-replace-this", gs_api)
+        repl = repl.replace("cse-id-replace-this", gs_engineID)
+        repl = repl.replace("value=" + serverlanguage, "value=" + serverlanguage + " selected")
+
+        repl = repl.replace(/wayback" checked/, "wayback\"")
+
+        if (redirector_only = "none") {
+            repl = repl.replace(/off"/, "off\" checked")
+        } else if (redirector_only = "wayback") {
+            repl = repl.replace(/wayback"/, "wayback\" checked")
+        } else if (redirector_only = "yt2009") {
+            if (yt2009address == "") {
+                repl = repl.replace(/off"/, "off\" checked")
+            } else {
+                repl = repl.replace(/yt2009"/, "yt2009\" checked")
+            }
+        } else if (redirector_only == "both") {
+            if (yt2009address == "") {
+                repl = repl.replace(/wayback"/, "wayback\" checked")
+            } else {
+                repl = repl.replace(/on"/, "on\" checked")
+            }
+        }
+
+        repl = repl.replace("waybackdate-replace-this", waybackdate)
+        repl = repl.replace("yt2009addr-replace-this", yt2009address)
+
+        if (toHTTP == true) {
+            repl = repl.replace(/p value=1/, "p value=1 checked")
+        }
+
+        if (only_old == true) {
+            repl = repl.replace(/d value=1/, "d value=1 checked")
+        }
+
+        repl = repl.replace("onlyolddate-replace-this", only_old_date)
+
+        res.send(repl)
+    })
+})
+
 app.get('/accounts/Login', (req, res) => {
     const filePath = path.join(__dirname, "/html/" + serverlanguage + "/signin.html");
-    fs.readFile(filePath, (err, data) => {
-        res.set("Content-Type", "text/html;charset=Shift_JIS")
-        res.send(data)
-    } )
+    if (serverlanguage == "ja") {
+        fs.readFile(filePath, (err, data) => {
+            res.set("Content-Type", "text/html;charset=Shift_JIS")
+            res.send(data)
+        })
+    } else {
+        fs.readFile(filePath, (err, data) => {
+            data = data.toString();
+            res.send(data)
+        })
+    }
+})
+
+app.get('/firefox', (req, res) => {
+    const filePath = path.join(__dirname, "/html/" + serverlanguage + "/firefox/index.html");
+    if (serverlanguage == "ja") {
+        fs.readFile(filePath, (err, data) => {
+            res.set("Content-Type", "text/html;charset=Shift_JIS")
+            res.send(data)
+        })
+    } else {
+        fs.readFile(filePath, (err, data) => {
+            res.send(data)
+        })
+    }
 })
 
 app.post('/accounts/LoginAuth', (req, res) => {
@@ -291,24 +495,32 @@ app.get('/clearcookies', (req, res) => {
 })
 
 app.get('/search', async (req, res) => {
+    console.log("[INFO] search: got an /search GET")
+    if (gs_api == "" || gs_engineID == "") {
+        console.log("[WARN] search: Google Custom Search API or Programmable Search Engine ID is not set! redirecting to /gs2009settings")
+        res.redirect("/gs2009settings")
+        return
+    }
     const startTime = Date.now();
     let nowTime = 0;
     var sqparam = qs.parse(parseurl(req).query);
-    console.log(sqparam.q);
     if (sqparam.q == "") {
+        console.log("[INFO] search: query was empty, redirecting to /")
         res.redirect('/');
         return
     }
     if (sqparam.q.includes('%')) {
+        console.log("[INFO] search: maybe Shift-JIS? trying to decode to Unicode")
         let sjisArray = Encoding.urlDecode(sqparam.q);
         let unicodeArray = Encoding.convert(sjisArray, { to: 'UNICODE', from: 'SJIS' });
         query = Encoding.codeToString(unicodeArray);
     } else {
         query = sqparam.q;
     }
-    console.log(query)
+    console.log("[INFO] search: extracted query: " + query)
 
     if (only_old == true) {
+        console.log("[INFO] search: only_old is enabled, adding before:")
         actualq = query
         if (only_old_date == undefined) {
             query = query + " before:2010-03-21";
@@ -316,26 +528,33 @@ app.get('/search', async (req, res) => {
         query = query + " before:" + only_old_date;
     }
 
-    console.log(req.query)
+    // console.log(req.query)
+
+    console.log("[INFO] search: waiting for result")
 
     let result = await search();
-    console.log("result: ", result);
-    console.log(JSON.stringify(result.data.items, null, 2))
-    console.log("-----------------------------------------------");
+
+    console.log("[INFO] search: got an result")
+    // console.log("result: ", result);
+    // console.log(JSON.stringify(result.data.items, null, 2))
+    // console.log("-----------------------------------------------");
     const link = [];
     result.data.items.forEach(item => {
-        console.log("-----------------------------")
-        console.log(item.htmlTitle, item.displayLink, item.link, item.htmlSnippet, item.htmlFormattedUrl)
+        // console.log("-----------------------------")
+        // console.log(item.htmlTitle, item.displayLink, item.link, item.htmlSnippet, item.htmlFormattedUrl)
         link.push(item.displayLink);
     })
 
     if (req.query.btnI == "I'm Feeling Lucky") {
+        console.log("[INFO] search: feeling lucky, redirecting to first link")
         res.redirect(result.data.items[0].link)
         return
     }
 
     const linklist = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const alphlist = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+
+    console.log("[INFO] search: Sorting item")
     link.forEach((item, i) => {
         
         console.log("link:" + link[i])
@@ -382,20 +601,10 @@ app.get('/search', async (req, res) => {
         }
     })
 
-    console.log("linkalplist:")
+    console.log("[INFO] search: Sorted Alphabet list:")
     console.log(linkalplist);
-    console.log("linknumlist:")
+    console.log("[INFO] search: Sorted Number list:")
     console.log(linknumlist);
-    
-    if (FUCK == true) {
-        result.data.items.forEach(item => {
-            item.htmlTitle = item.htmlTitle.replace("Download <b>Windows</b>", "Download THE FUCKING HORRIBLE WINDOWS 11")
-            item.htmlTitle = item.htmlTitle.replace("<b>Windows</b> 11", "FUCK WINDOWS 11")
-            item.htmlTitle = item.htmlTitle.replace("<b>Windows 11</b>", "FUCK WINDOWS 11")
-            item.htmlTitle = item.htmlTitle.replace("AI", "THE FUCKING AI")
-            item.htmlTitle = item.htmlTitle.replace("Copilot", "THE FUCKING HORRIBLE AI")
-        })
-    }
 
     let filePath = "";
     filePath = path.join(__dirname, "/html/" + serverlanguage + "/search.html");
@@ -437,11 +646,18 @@ app.get('/search', async (req, res) => {
         if (count == 0) {
             void(0);
         } else {
-            items.splice(lastIdx + 1, 0, "\nlastone\n")
+            result.data.items.forEach((item, i) => {
+                if (typeof linkalplist[i] !== 'number') {
+                    if (typeof linkalplist[i+1] == 'number') {
+                        items.splice(i + 1, 0, "lastone\n")
+                    }
+                }
+            })
         }
 
         repl = items.join("item")
 
+        
         result.data.items.forEach((item, i) => {
             if (typeof linkalplist[i] !== 'number') {
                 repl = repl.replace(/item/, ext_t_s_m)
@@ -450,21 +666,93 @@ app.get('/search', async (req, res) => {
             repl = repl.replace(/item/, ext_t_s_n)
             repl = repl.replace(/lastone/, ext_t_s_eom)
         })
-        
+
         repl = repl.replace(/htmlTitle/, result.data.items[0].htmlTitle)
         if (toHTTP == true) {
             result.data.items[0].link = result.data.items[0].link.replace("https://", "http://")
         }
-        repl = repl.replace(/UrlLink/, result.data.items[0].link)
-        repl = repl.replace(/htmlSnippet/, result.data.items[0].htmlSnippet)
-        repl = repl.replace(/relatedUrlLink/, result.data.items[0].link)
-        repl = repl.replace(/htmlFormattedUrl/, result.data.items[0].htmlFormattedUrl)
-        repl = repl.replace(/displayLink/, result.data.items[0].displayLink)
+
+        const search = [];
+        search.htmlTitle = "";
+        search.link = "";
+        search.htmlSnippet = "";
+        search.htmlFormattedUrl = "";
+        search.displayLink = "";
+
+        search.htmlTitle = result.data.items[0].htmlTitle;
+        search.link = result.data.items[0].link;
+        search.htmlFormattedUrl = result.data.items[0].htmlFormattedUrl;
+        search.htmlSnippet = result.data.items[0].htmlSnippet;
+        search.displayLink = result.data.items[0].displayLink;
+
+        if (redirector == true) {
+            let waybacklink
+            if (redirector_only == "yt2009") {
+                if (yt2009address == undefined) {
+                    return
+                }
+                search.link = search.link.replace("youtube.com", yt2009address)
+                search.link = search.link.replace("www.youtube.com", yt2009address)
+            } else if (redirector_only == "wayback") {
+                if (waybackdate == undefined) {
+                    waybacklink = "http://web.archive.org/web/20100324182056/"
+                } else {
+                    waybacklink = "http://web.archive.org/web/" + waybackdate + "/"
+                }
+                search.link = search.link.replace("http://", waybacklink)
+                search.link = search.link.replace("https://", waybacklink)
+            } else if (redirector_only == "none") {
+            } else if (redirector_only == "both") {
+                if (waybackdate == undefined) {
+                    waybacklink = "http://web.archive.org/web/20100324182056/"
+                } else {
+                    waybacklink = "http://web.archive.org/web/" + waybackdate + "/"
+                }
+                search.link = search.link.replace("http://", waybacklink)
+                search.link = search.link.replace("https://", waybacklink)
+
+                if (yt2009address == undefined) {
+                } else {
+                    let yt2009link = "http://" + yt2009address;
+                    let ytlink0 = waybacklink + "https://www.youtube.com"
+                    let ytlink1 = waybacklink + "http://www.youtube.com"
+                    let ytlink2 = waybacklink + "www.youtube.com"
+                    search.link = search.link.replace(ytlink0, yt2009link)
+                    search.link = search.link.replace(ytlink1, yt2009link)
+                    search.link = search.link.replace(ytlink2, yt2009link)
+                }
+            }
+        }
+        repl = repl.replace(/relatedUrlLink/, search.link)
+        repl = repl.replace(/UrlLink/, search.link)
+        repl = repl.replace(/htmlSnippet/, search.htmlSnippet)
+        repl = repl.replace(/htmlFormattedUrl/, search.htmlFormattedUrl)
 
         result.data.items.forEach((item, i) => {
-            repl = repl.replace(/htmlTitle/, item.htmlTitle)
+            const search = [];
+            search.htmlTitle = "";
+            search.link = "";
+            search.htmlSnippet = "";
+            search.htmlFormattedUrl = "";
+            search.displayLink = "";
+
+            if (i != linknumlist[i]){
+                search.htmlTitle = result.data.items[linknumlist[i]].htmlTitle;
+                search.link = result.data.items[linknumlist[i]].link;
+                search.htmlFormattedUrl = result.data.items[linknumlist[i]].htmlFormattedUrl;
+                search.htmlSnippet = result.data.items[linknumlist[i]].htmlSnippet;
+                search.displayLink = result.data.items[linknumlist[i]].displayLink;
+            } else {
+                search.htmlTitle = item.htmlTitle;
+                search.link = item.link;
+                search.htmlFormattedUrl = item.htmlFormattedUrl;
+                search.htmlSnippet = item.htmlSnippet;
+                search.displayLink = item.displayLink;
+            }
+            
+            repl = repl.replace(/htmlTitle/, search.htmlTitle)
             if (toHTTP == true) {
-                item.link = item.link.replace("https://", "http://")
+                search.link = search.link.replace("https://", "http://")
             }
             if (redirector == true) {
                 let waybacklink
@@ -472,24 +760,25 @@ app.get('/search', async (req, res) => {
                     if (yt2009address == undefined) {
                         return
                     }
-                    item.link = item.link.replace("youtube.com", yt2009address)
-                    item.link = item.link.replace("www.youtube.com", yt2009address)
+                    search.link = search.link.replace("youtube.com", yt2009address)
+                    search.link = search.link.replace("www.youtube.com", yt2009address)
                 } else if (redirector_only == "wayback") {
                     if (waybackdate == undefined) {
                         waybacklink = "http://web.archive.org/web/20100324182056/"
                     } else {
                         waybacklink = "http://web.archive.org/web/" + waybackdate + "/"
                     }
-                    item.link = item.link.replace("http://", waybacklink)
-                    item.link = item.link.replace("https://", waybacklink)
-                } else {
+                    search.link = search.link.replace("http://", waybacklink)
+                    search.link = search.link.replace("https://", waybacklink)
+                } else if (redirector_only == "none") {
+                } else if (redirector_only == "both") {
                     if (waybackdate == undefined) {
                         waybacklink = "http://web.archive.org/web/20100324182056/"
                     } else {
                         waybacklink = "http://web.archive.org/web/" + waybackdate + "/"
                     }
-                    item.link = item.link.replace("http://", waybacklink)
-                    item.link = item.link.replace("https://", waybacklink)
+                    search.link = search.link.replace("http://", waybacklink)
+                    search.link = search.link.replace("https://", waybacklink)
 
                     if (yt2009address == undefined) {
                     } else {
@@ -497,17 +786,24 @@ app.get('/search', async (req, res) => {
                         let ytlink0 = waybacklink + "https://www.youtube.com"
                         let ytlink1 = waybacklink + "http://www.youtube.com"
                         let ytlink2 = waybacklink + "www.youtube.com"
-                        item.link = item.link.replace(ytlink0, yt2009link)
-                        item.link = item.link.replace(ytlink1, yt2009link)
-                        item.link = item.link.replace(ytlink2, yt2009link)
+                        search.link = search.link.replace(ytlink0, yt2009link)
+                        search.link = search.link.replace(ytlink1, yt2009link)
+                        search.link = search.link.replace(ytlink2, yt2009link)
                     }
                 }
             }
-            repl = repl.replace(/UrlLink/, item.link)
-            repl = repl.replace(/htmlSnippet/, item.htmlSnippet)
-            repl = repl.replace(/relatedUrlLink/, item.link)
-            repl = repl.replace(/htmlFormattedUrl/, item.htmlFormattedUrl)
-            repl = repl.replace(/displayLink/, item.displayLink)
+
+            if (typeof linkalplist[i] !== 'number') {
+                if (typeof linkalplist[i+1] == 'number') {
+                    repl = repl.replace(/moreRelatedLink/, search.displayLink)
+                    repl = repl.replace(/moreRelatedLink/, search.displayLink)
+                }
+            }
+            repl = repl.replace(/relatedUrlLink/, search.link)
+            repl = repl.replace(/UrlLink/, search.link)
+            repl = repl.replace(/htmlSnippet/, search.htmlSnippet)
+            repl = repl.replace(/htmlFormattedUrl/, search.htmlFormattedUrl)
+            //repl = repl.replace(/displayLink/, search.displayLink)
         })
 
         repl = repl.replace(/item/g, "")
@@ -524,6 +820,12 @@ app.get('/search', async (req, res) => {
             res.send(encoded)
             return
         }
+        console.log("[INFO] search: Sending replaced result")
         res.send(repl)
     } )
 })
+
+process.on('SIGINT', function() {
+    console.log("[INFO] Server stopped by interrupt signal");
+    process.exit();
+});

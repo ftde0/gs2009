@@ -9,7 +9,7 @@
 <h5 align="center">Check Protoweb for early-2000s, Gplex about after 2010+ styles...</h5>
 
 > [!IMPORTANT]
-> **This frontend is pretty undone!** Please make sure that might has the bugs/crashes while using this frontend.<br>
+> **This frontend is pretty extremely incompleted!** Please make sure that might has the bugs/crashes while using this frontend.<br>
 > Also, if you encounted the bug/or crash, **Please make the issue.**
 
 ## Features
@@ -32,7 +32,7 @@
  - **Port**
     - It is hidden in settings page, but you can configure it on config.json.
 
-### API key / CSE ID (Programmable Search Engine ID)
+### Custom Search API key / Programmable Search Engine ID (CSE ID)
 **You need this to show search results on this frontend!**
 Otherwise, You will be redirected to settings page when you tried to search.
 

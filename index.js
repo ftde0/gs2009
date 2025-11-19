@@ -118,20 +118,41 @@ if (serverlanguage == "jp") {
     serverlanguage = "ja";
 }
 
-const template_gbar_user = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user.txt"); // ext_t_g_u
-const template_gbar_user_index = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_index.txt"); // ext_t_g_u
-const template_gbar_user_logged = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_logged.txt"); // ext_t_g_u_l
+let template_gbar_user = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user.txt"); // ext_t_g_u
+let template_gbar_user_index = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_index.txt"); // ext_t_g_u
+let template_gbar_user_logged = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_logged.txt"); // ext_t_g_u_l
 
-const template_search_normal = path.join(__dirname, "/template/" + serverlanguage + "/search/normal.txt"); // ext_t_s_n
-const template_search_more = path.join(__dirname, "/template/" + serverlanguage + "/search/more.txt"); // ext_t_s_m
-const template_search_EOM = path.join(__dirname, "/template/" + serverlanguage + "/search/more_eom.txt"); // ext_t_s_EOM
+let template_search_normal = path.join(__dirname, "/template/" + serverlanguage + "/search/normal.txt"); // ext_t_s_n
+let template_search_more = path.join(__dirname, "/template/" + serverlanguage + "/search/more.txt"); // ext_t_s_m
+let template_search_EOM = path.join(__dirname, "/template/" + serverlanguage + "/search/more_eom.txt"); // ext_t_s_EOM
 
-const ext_t_g_u = fs.readFileSync(template_gbar_user, "utf8")
+let ext_t_g_u = fs.readFileSync(template_gbar_user, "utf8")
 console.log("[INFO] loaded template (template_gbar_user)")
-const ext_t_g_u_i = fs.readFileSync(template_gbar_user_index, "utf8")
+let ext_t_g_u_i = fs.readFileSync(template_gbar_user_index, "utf8")
 console.log("[INFO] loaded template (template_gbar_user_index)")
-const ext_t_g_u_l = fs.readFileSync(template_gbar_user_logged, "utf8")
+let ext_t_g_u_l = fs.readFileSync(template_gbar_user_logged, "utf8")
 console.log("[INFO] loaded template (template_gbar_user_logged)")
+
+function reloadtemplate(){
+
+    template_gbar_user = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user.txt"); // ext_t_g_u
+    template_gbar_user_index = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_index.txt"); // ext_t_g_u
+    template_gbar_user_logged = path.join(__dirname, "/template/" + serverlanguage + "/gbar_user_logged.txt"); // ext_t_g_u_l
+
+    template_search_normal = path.join(__dirname, "/template/" + serverlanguage + "/search/normal.txt"); // ext_t_s_n
+    template_search_more = path.join(__dirname, "/template/" + serverlanguage + "/search/more.txt"); // ext_t_s_m
+    template_search_EOM = path.join(__dirname, "/template/" + serverlanguage + "/search/more_eom.txt"); // ext_t_s_EOM
+
+    ext_t_g_u = fs.readFileSync(template_gbar_user, "utf8")
+    console.log("[INFO] reloaded template (template_gbar_user)")
+    ext_t_g_u_i = fs.readFileSync(template_gbar_user_index, "utf8")
+    console.log("[INFO] reloaded template (template_gbar_user_index)")
+    ext_t_g_u_l = fs.readFileSync(template_gbar_user_logged, "utf8")
+    console.log("[INFO] reloaded template (template_gbar_user_logged)")
+    console.log("[INFO] reloaded all template/template paths")
+}
+
+reloadtemplate();
 
 var redirector = true;
 
@@ -220,6 +241,7 @@ app.get('/setprefs', (req, res) => {
     fs.writeFileSync('config.json', JSON.stringify(JsonTemp));
     console.log("[INFO] Generated config.json to " + __dirname + "/config.json")
     reloadconfig();
+    reloadtemplate();
     res.redirect('/');
 })
 

@@ -813,8 +813,8 @@ app.get('/search', async (req, res) => {
                     if (yt2009address == undefined) {
                         return
                     }
-                    search.link = search.link.replace("youtube.com", yt2009address)
                     search.link = search.link.replace("www.youtube.com", yt2009address)
+                    search.link = search.link.replace("youtube.com", yt2009address)
                 } else if (redirector_only == "wayback") {
                     if (waybackdate == undefined) {
                         waybacklink = "http://web.archive.org/web/20100324182056/"

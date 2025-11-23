@@ -21,11 +21,23 @@
  - Redirector to **HTTP / [yt2009](https://github.com/ftde0/yt2009) & [Wayback Machine](https://web.archive.org)**
 
 ## Usage
+### Initialize
 1. Install [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/). (tested on node 18.19.1/24.11.1, npm 11.6.2/9.2.0)
-2. After cloning the repository, `npm install` (if need, `npm audit fix`)
+2. **Clone the repository with `git clone https://github.com/pap-git/gs2009`**, then `npm install` (if need, `npm audit fix`)
 3. `npm start` or `node index.js`
 4. It will automatically generates config.json, and runs server at PORT 3000 by default.
 5. Go to `http://[IP]:3000/gs2009settings`, then put your **Custom Search API key** and **Programmable Search Engine ID** (CSE ID), then Save it.
+### Running the server
+`npm start` or `node index.js`
+### Updating the server
+1. Stop the server if any gs2009 instance running in machine
+2. `npm update` or `npm updater.json`
+
+**Before version `1.1.20251124` (Updating to latest)**
+1. Copy `config.json` to somewhere
+2. Remove gs2009 working folder
+3. `git clone https://github.com/pap-git/gs2009`
+4. Copy `config.json` to new gs2009 working folder
 
 ## Available Preferences
 

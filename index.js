@@ -11,6 +11,9 @@ import Encoding from 'encoding-japanese';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+const pjson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+const gs2009_version = pjson.version
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -548,6 +551,7 @@ app.get('/gs2009settings', (req, res) => {
         }
 
         repl = repl.replace("onlyolddate-replace-this", only_old_date)
+        repl = repl.replace("VersionNumber", gs2009_version)
 
         res.send(repl)
     })

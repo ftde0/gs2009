@@ -159,6 +159,10 @@ var redirector = true;
 var query;
 var actualq;
 
+var hl;
+var lr;
+var start;
+
 let SimLogin = [];
 
 // https://qiita.com/ganyariya/items/23d51b05bacdcb27fce6
@@ -166,13 +170,25 @@ let SimLogin = [];
 
 async function search(event) {
 
+    if (isNaN(start) == true) {
+        start = 0;
+    }
+
+    console.log(start)
+
     let result = await customSearch.cse.list({
 
         auth: gs_api,
 
         cx: gs_engineID,
 
-        q: query
+        q: query,
+
+        hl: hl,
+
+        lr: lr,
+
+        start: start
     });
 
     return(result);
@@ -294,6 +310,13 @@ app.get('/accounts/mail.gif', (req, res) => {
     });
 })
 
+app.get('/images/yellow_warning.gif', (req, res) => {
+    fs.readFile('./assets/images/yellow_warning.gif', (err, data) => {
+      res.type('gif');
+      res.send(data);
+    });
+})
+
 app.get('/images/logo_sm.gif', (req, res) => {
     fs.readFile('./assets/images/logo_sm.gif', (err, data) => {
       res.type('gif');
@@ -361,6 +384,38 @@ app.get('/webhp', (req, res) => {
     console.log("[INFO] Simulated login username: " + req.cookies.SimLogin);
     let SimLogin = req.cookies.SimLogin;
     const filePath = path.join(__dirname, "/html/" + serverlanguage + "/index.html");
+    fs.readFile(filePath, (err, data) => {
+        let repl = "";
+        
+        if (serverlanguage == "ja") {
+            repl = iconv.decode(data, 'shift_jis')
+        } else {
+            repl = data.toString();
+        }
+
+        if (SimLogin == undefined || SimLogin == "" || SimLogin == "undefined") {
+            repl = repl.replace("gbar_user_REPLACE_HERE", ext_t_g_u_i)
+        } else {
+            repl = repl.replace("gbar_user_REPLACE_HERE", ext_t_g_u_l)
+        }
+        
+        repl = repl.replace(/gbar_username/g, SimLogin)
+        if (serverlanguage == "ja"){
+            let encoded = iconv.encode(repl, 'shift_jis')
+            res.set("Content-Type", "text/html;charset=Shift_JIS")
+            res.send(encoded)
+            return
+        }
+        res.send(repl)
+        
+    } )
+    return
+});
+
+app.get('/search_csstest', (req, res) => {
+    console.log("[INFO] Simulated login username: " + req.cookies.SimLogin);
+    let SimLogin = req.cookies.SimLogin;
+    const filePath = path.join(__dirname, "/html/" + serverlanguage + "/search.html");
     fs.readFile(filePath, (err, data) => {
         let repl = "";
         
@@ -583,9 +638,46 @@ app.get('/search', async (req, res) => {
 
     // console.log(req.query)
 
+    if (req.query.hl == "" || req.query.hl == undefined) {
+        hl = serverlanguage;
+    } else {
+        hl = req.query.hl;
+    }
+    if (req.query.lr != "" || req.query.lr != undefined) {
+        lr = req.query.lr
+    }
+
+    if (req.query.start != "" || req.query.start != undefined) {
+        start = parseInt(req.query.start) + 1;
+    } else {
+        start = 0;
+    }
+
     console.log("[INFO] search: waiting for result")
 
-    let result = await search();
+    let result;
+    try {
+        result = await search();
+    } catch(e) {
+        console.error("[ERROR] GaxiosError:", e.cause.status);
+        console.error("[ERROR]", e.cause.message);
+        if (e.cause.status != "RESOURCE_EXHAUSTED") {
+            const filePath = path.join(__dirname, "/html/error.html");
+            fs.readFile(filePath, (err, data) => {
+                let repl = data.toString();
+                repl = repl.replace(/status/, e.cause.status)
+                repl = repl.replace(/message/, e.cause.message)
+                res.send(repl)
+            })
+        } else {
+            const filePath = path.join(__dirname, "/html/quota.html");
+            fs.readFile(filePath, (err, data) => {
+                data = data.toString();
+                res.send(data)
+            })
+        }
+        return
+    }
 
     console.log("[INFO] search: got an result")
     // console.log("result: ", result);
@@ -866,14 +958,65 @@ app.get('/search', async (req, res) => {
 
         repl = repl.replace(/searchFinish/g, searchFinish.slice(0,4))
 
+        if (req.query.start <= 9 || isNaN(req.query.start) == true) {
+            repl = repl.replace(/<td class="b">[\s\S]*?<\/a>/, '')
+            repl = repl.replace(/<td>\s*<a[^>]*href="\/search\?[^"]*">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+        } else {
+            if (start <= 20) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=10&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 30) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=20&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 40) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=30&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 50) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=40&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 60) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=50&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 70) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=60&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 80) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=70&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else if (start <= 90) {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=80&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+            } else {
+                repl = repl.replace(/<td>\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=90&amp;sa=N">/, '<td class="cur"><a tabindex="-1" style="color:#a90a08;font-weight:bold">')
+                repl = repl.replace(/<td class="b">\s*<a href="\/search\?hl=[^&]*&amp;q=[^&]*&amp;start=nextstart&amp;sa=N">[\s\S]*?<\/a>/g, '<td><span class="csb" style="background-position:-76px 0;width:40px"></span>')
+            }
+        }
+
+        if (req.query.start <= 9 || isNaN(req.query.start) == true) {
+        } else if (start <= 11) {
+            repl = repl.replace(/&amp;start=prevstart/, "");
+        } else {
+            repl = repl.replace(/prevstart/, parseInt(req.query.start) - 10 )
+        }
+
+        if (req.query.start <= 9 || isNaN(req.query.start) == true) {
+            repl = repl.replace(/nextstart/, 10)
+        } else {
+            repl = repl.replace(/nextstart/, parseInt(req.query.start) + 10 )
+        }
+
+        repl = repl.replace(/formattedTotalResults/, result.data.searchInformation.formattedTotalResults)
+        if (start != 0) {
+            repl = repl.replace(/currentItems/, start)
+            repl = repl.replace(/currentItems2/, start + 9)
+        } else {
+            repl = repl.replace(/currentItems/, 1)
+            repl = repl.replace(/currentItems2/, start + 10)
+        }
+
         repl = repl.replace(/gbar_username/g, SimLogin)
+        console.log("[INFO] search: Sending replaced result")
+        
+        console.log("result: ", result);
+        console.log()
         if (serverlanguage == "ja"){
             let encoded = iconv.encode(repl, 'shift_jis')
             res.set("Content-Type", "text/html;charset=Shift_JIS")
             res.send(encoded)
             return
         }
-        console.log("[INFO] search: Sending replaced result")
         res.send(repl)
     } )
 })

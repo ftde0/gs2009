@@ -2,3 +2,5 @@
 /websites
 config.json
 create.js
+output.html
+.gitignore

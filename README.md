@@ -38,7 +38,7 @@ Otherwise, You will be redirected to settings page when you tried to search.
 
 ### Language
 **Available language:** `en, ja`
- - You can add your native language by pull requesting. Please look guide later!
+ - You can add your native language by pull requesting. Please look this [guide](https://github.com/pap-git/gs2009/wiki/Translation) to start translating!
 
 ### Redirector
  - **HTTPS to HTTP**

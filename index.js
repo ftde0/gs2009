@@ -581,6 +581,7 @@ app.get('/firefox', (req, res) => {
         })
     } else {
         fs.readFile(filePath, (err, data) => {
+            repl = data.toString();
             res.send(data)
         })
     }

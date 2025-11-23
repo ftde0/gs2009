@@ -16,9 +16,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "update": "node updater.js"
   },
   "dependencies": {
+    "auto-git-update": "^1.1.1",
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "cookie-session": "^2.1.1",
@@ -26,8 +28,6 @@
     "express": "^5.1.0",
     "googleapis": "^166.0.0",
     "iconv-lite": "^0.7.0",
-    "qs": "^6.14.0",
-    "unescape": "^1.0.1"
-  },
-  "devDependencies": {}
+    "qs": "^6.14.0"
+  }
 }

@@ -129,12 +129,16 @@ let template_search_normal = path.join(__dirname, "/template/" + serverlanguage 
 let template_search_more = path.join(__dirname, "/template/" + serverlanguage + "/search/more.txt"); // ext_t_s_m
 let template_search_EOM = path.join(__dirname, "/template/" + serverlanguage + "/search/more_eom.txt"); // ext_t_s_EOM
 
+let template_did_you_mean = path.join(__dirname, "/template/" + serverlanguage + "/search/did_you_mean.txt"); // ext_t_dym
+
 let ext_t_g_u = fs.readFileSync(template_gbar_user, "utf8")
 console.log("[INFO] loaded template (template_gbar_user)")
 let ext_t_g_u_i = fs.readFileSync(template_gbar_user_index, "utf8")
 console.log("[INFO] loaded template (template_gbar_user_index)")
 let ext_t_g_u_l = fs.readFileSync(template_gbar_user_logged, "utf8")
 console.log("[INFO] loaded template (template_gbar_user_logged)")
+let ext_t_dym = fs.readFileSync(template_did_you_mean, "utf8")
+console.log("[INFO] loaded template (template_did_you_mean)")
 
 function reloadtemplate(){
 
@@ -146,12 +150,16 @@ function reloadtemplate(){
     template_search_more = path.join(__dirname, "/template/" + serverlanguage + "/search/more.txt"); // ext_t_s_m
     template_search_EOM = path.join(__dirname, "/template/" + serverlanguage + "/search/more_eom.txt"); // ext_t_s_EOM
 
+    template_did_you_mean = path.join(__dirname, "/template/" + serverlanguage + "/search/did_you_mean.txt"); // ext_t_dym
+
     ext_t_g_u = fs.readFileSync(template_gbar_user, "utf8")
     console.log("[INFO] reloaded template (template_gbar_user)")
     ext_t_g_u_i = fs.readFileSync(template_gbar_user_index, "utf8")
     console.log("[INFO] reloaded template (template_gbar_user_index)")
     ext_t_g_u_l = fs.readFileSync(template_gbar_user_logged, "utf8")
     console.log("[INFO] reloaded template (template_gbar_user_logged)")
+    ext_t_dym = fs.readFileSync(template_did_you_mean, "utf8")
+    console.log("[INFO] loaded template (template_did_you_mean)")
     console.log("[INFO] reloaded all template/template paths")
 }
 
@@ -957,6 +965,21 @@ app.get('/search', async (req, res) => {
             //repl = repl.replace(/displayLink/, search.displayLink)
         })
 
+        try {
+            if (result.data.spelling.correctedQuery != undefined) {
+                repl = repl.replace(/didyoumean/g, ext_t_dym)
+                let suggested = result.data.spelling.correctedQuery;
+                let date;
+                if (only_old == true) {
+                    date = " before:" + only_old_date
+                    suggested = suggested.replace(date, "")
+                }
+                repl = repl.replace(/suggestedQuery/g, suggested);
+            }
+        } catch {
+            repl = repl.replace(/didyoumean/g, "")
+        }
+
         repl = repl.replace(/item/g, "")
 
         nowTime = (Date.now() - startTime) / 1000;
@@ -1013,6 +1036,7 @@ app.get('/search', async (req, res) => {
         }
 
         repl = repl.replace(/gbar_username/g, SimLogin)
+        repl = repl.replace(/topItem/g, "")
         console.log("[INFO] search: Sending replaced result")
         
         console.log("result: ", result);

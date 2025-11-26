@@ -11,6 +11,8 @@
 > [!IMPORTANT]
 > **This frontend is pretty extremely incompleted!** Please make sure that might has the bugs/crashes while using this frontend.<br>
 > Also, if you encounted the bug/or crash, **Please make the issue.**
+>
+> For the future questions/help, **[Join the Discord server](https://discord.gg/pkmJweRZuU) and post it to #support forum.**
 
 ## Features
  - **2009 google**

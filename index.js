@@ -7,6 +7,7 @@ import parseurl from 'parseurl';
 import qs from 'qs';
 import googleapis from 'googleapis';
 import Encoding from 'encoding-japanese';
+import gogul from './gogul.js';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -185,22 +186,35 @@ async function search(event) {
         start = 0;
     }
 
+    let result = {}
+
     console.log(start)
 
-    let result = await customSearch.cse.list({
+    if(gs_api == "") {
+        result = await gogul.asyncList({
+            "q": query,
+            "hl": hl,
+            "lr": lr,
+            "start": start
+        })
+    } else {
+        result = await customSearch.cse.list({
 
-        auth: gs_api,
+            auth: gs_api,
 
-        cx: gs_engineID,
+            cx: gs_engineID,
 
-        q: query,
+            q: query,
 
-        hl: hl,
+            hl: hl,
 
-        lr: lr,
+            lr: lr,
 
-        start: start
-    });
+            start: start
+        });
+    }
+
+    
 
     return(result);
 }
@@ -617,11 +631,11 @@ app.get('/clearcookies', (req, res) => {
 
 app.get('/search', async (req, res) => {
     console.log("[INFO] search: got an /search GET")
-    if (gs_api == "" || gs_engineID == "") {
+    /*if (gs_api == "" || gs_engineID == "") {
         console.log("[WARN] search: Google Custom Search API or Programmable Search Engine ID is not set! redirecting to /gs2009settings")
         res.redirect("/gs2009settings")
         return
-    }
+    }*/
     const startTime = Date.now();
     let nowTime = 0;
     var sqparam = qs.parse(parseurl(req).query);
@@ -672,6 +686,7 @@ app.get('/search', async (req, res) => {
     try {
         result = await search();
     } catch(e) {
+        console.log(e)
         console.error("[ERROR] GaxiosError:", e.cause.status);
         console.error("[ERROR]", e.cause.message);
         if (e.cause.status != "RESOURCE_EXHAUSTED") {
@@ -796,7 +811,7 @@ app.get('/search', async (req, res) => {
             repl = repl.replace(/query/g, query)
         }
         
-        let lastIdx = linkalplist.findLastIndex(item => /[a-z]/i.test(item))
+        //let lastIdx = linkalplist.findLastIndex(item => /[a-z]/i.test(item))
         
         let items = repl.split("item")
 
